@@ -7,7 +7,7 @@ import { usePathname } from 'next/navigation'
 
 export default function HomePage() {
   const pathname = usePathname();
-  console.log("🚀 ~ HomePage ~ router:", window.location)
+  console.log("🚀 ~ HomePage ~ router:", pathname)
 
   // const code = router.query.code;
 
