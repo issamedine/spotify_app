@@ -8,11 +8,11 @@ export default function HomePage() {
   // pages/users/[userId].js
 
   const router = useRouter();
-  const { query } = router as any;
+  // const { query } = router as any;
 
 
   // const { query } = router as { query?: any }; 
-  console.log("🚀 ~ HomePage ~ code:", query)
+  console.log("🚀 ~ HomePage ~ code:", router)
   // useRefreshToken(query.code as string);
 
   return (
