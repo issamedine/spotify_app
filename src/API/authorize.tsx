@@ -1,5 +1,5 @@
 const SPOTIFY_CLIENT_ID = "3738206533f14da59d6fed4e32c0c314";
-const redirectUri = "https://spotify-app-hazel-iota.vercel.app/";
+const redirectUri = "https://spotify-app-eight-xi.vercel.app/";
 
 function generateRandomString(length: number): string {
   let text = "";
