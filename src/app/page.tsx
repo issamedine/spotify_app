@@ -1,19 +1,23 @@
+'use client';
+
 import AuthButton from "@/components/auth/AuthButton";
 import UserProfile from "@/components/profile/UserProfile";
 import useRefreshToken from "@/hooks/useRefreshToken";
-import { useRouter } from "next/router";
+import { usePathname } from 'next/navigation'
 
 export default function HomePage() {
-  const router = useRouter();
+  const pathname = usePathname();
+  console.log("🚀 ~ HomePage ~ router:", window.location)
 
-  const code = router.query.code;
+  // const code = router.query.code;
 
-  useRefreshToken(code as string);
+  // useRefreshToken(code as string);
 
   return (
     <div>
       <h1>Spotify OAuth with NextAuth.js</h1>
-      {code ? <UserProfile /> : <AuthButton />}
+       <UserProfile /> 
+       <AuthButton />
     </div>
   );
 }
