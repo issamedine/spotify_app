@@ -2,18 +2,18 @@
 
 import useRefreshToken from '@/hooks/useRefreshToken';
 import { useSession, signOut } from 'next-auth/react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 export default function HomePage() {
   const router = useRouter();
-  const code = router.query.code;
-  console.log("🚀 ~ HomePage ~ code:", code)
-  useRefreshToken(code as string);
+  const { query } = router as { query?: any }; 
+  console.log("🚀 ~ HomePage ~ code:", query.code)
+  useRefreshToken(query.code as string);
 
   return (
     <div>
       <h1>Welcome to Spotify App</h1>
-      {code ? (
+      {query.code ? (
         <div>
           <p>Signed in as </p>
           <button>Sign out</button>
