@@ -15,7 +15,7 @@ const MyComponent: React.FC = () => {
   return (
     <div>
       <h1>Welcome to Spotify App</h1>
-      {code ? (
+      {code === "Not provided"? (
         <div>
           <p>Signed in as </p>
           <button onClick={() => logoutSpotify()}>Sign out</button>
