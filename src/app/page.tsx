@@ -10,6 +10,7 @@ import { getToken, logoutSpotify } from "./API/authorize";
 const MyComponent: React.FC = () => {
   const searchParams = useSearchParams();
   const code = searchParams.get("code") || "Not provided";
+  console.log("🚀 ~ code:", code)
   useRefreshToken(code as string);
 
   return (
