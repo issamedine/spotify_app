@@ -1,10 +1,12 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+import AuthButton from "@/components/auth/AuthButton";
+import UserProfile from "@/components/profile/UserProfile";
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <main className={styles.main}>
-     Hello 
-    </main>
+    <div>
+      <h1>Spotify OAuth with NextAuth.js</h1>
+      <AuthButton />
+      <UserProfile />
+    </div>
   );
 }
