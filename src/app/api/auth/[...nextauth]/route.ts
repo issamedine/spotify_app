@@ -1,14 +1,13 @@
 // /src/app/api/auth/[...nextauth]/route.ts
 
 import NextAuth from 'next-auth';
-import type { NextAuthOptions } from 'next-auth';
 import Spotify from 'next-auth/providers/spotify';
 
-const options: NextAuthOptions = {
+const authOptions = {
   providers: [
     Spotify({
-      clientId: process.env.SPOTIFY_CLIENT_ID as string,
-      clientSecret: process.env.SPOTIFY_CLIENT_SECRET as string,
+      clientId: process.env.SPOTIFY_CLIENT_ID!,
+      clientSecret: process.env.SPOTIFY_CLIENT_SECRET!,
       authorization: {
         params: {
           scope: 'user-read-email user-read-private',
@@ -18,15 +17,15 @@ const options: NextAuthOptions = {
   ],
   pages: {
     signIn: '/auth/signin', // Custom sign-in page
+    error: '/auth/error', // Custom error page (optional)
   },
   callbacks: {
-    async session({ session, token }) {
-      // Custom session handling, if needed
-      return session;
+    async session({ session, token }: any) {
+      return session; // Custom session handling if needed
     },
   },
 };
 
-const handler = NextAuth(options);
-
-export { handler as GET, handler as POST };
+// Named exports for HTTP methods
+export const GET = NextAuth(authOptions);
+export const POST = NextAuth(authOptions);
