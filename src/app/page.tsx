@@ -2,6 +2,7 @@
 
 import useRefreshToken from '@/hooks/useRefreshToken';
 import { useSession, signOut } from 'next-auth/react';
+import Link from 'next/link';
 import { useRouter } from "next/navigation";
 
 export default function HomePage() {
@@ -24,7 +25,7 @@ export default function HomePage() {
           <button>Sign out</button>
         </div>
       {/* ) : ( */}
-        <a href="/signin">Sign in with Spotify</a>
+        <Link href="/signin">Sign in with Spotify</Link>
       {/* )} */}
     </div>
   );
