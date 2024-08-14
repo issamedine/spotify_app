@@ -104,3 +104,15 @@ export const refreshSpotifyToken = async (refresh_token: string) => {
     console.log(err);
   }
 };
+
+export const logoutSpotify = () => {
+  // Clear any stored tokens
+  sessionStorage.removeItem("access_token");
+  sessionStorage.removeItem("refresh_token");
+  sessionStorage.removeItem("code_verifier");
+
+  // Redirect to Spotify logout and then to your app's home page
+  const logoutUrl =
+    "https://accounts.spotify.com/en/logout?continue=https://spotify-app-eight-xi.vercel.app/";
+  window.location.href = logoutUrl;
+};
