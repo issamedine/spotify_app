@@ -12,22 +12,10 @@ const MyComponent: React.FC = () => {
   const code = searchParams.get("code") || "Not provided";
   useRefreshToken(code as string);
 
-  const [accessToken, setAccessToken] = useState("");
-  console.log("🚀 ~ accessToken:", accessToken);
-
-  const fetchToken = async () => {
-    let response = await getToken(code);
-    setAccessToken(response.access_token);
-  };
-
-  useEffect(() => {
-    fetchToken();
-  }, [code]);
-
   return (
     <div>
       <h1>Welcome to Spotify App</h1>
-      {accessToken ? (
+      {code ? (
         <div>
           <p>Signed in as </p>
           <button onClick={() => logoutSpotify()}>Sign out</button>
