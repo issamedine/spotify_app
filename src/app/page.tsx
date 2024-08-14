@@ -13,14 +13,14 @@ export default function HomePage() {
   return (
     <div>
       <h1>Welcome to Spotify App</h1>
-      {router ? (
+      {/* {router ? ( */}
         <div>
           <p>Signed in as </p>
           <button>Sign out</button>
         </div>
-      ) : (
+      {/* ) : ( */}
         <a href="/signin">Sign in with Spotify</a>
-      )}
+      {/* )} */}
     </div>
   );
 }
