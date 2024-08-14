@@ -10,7 +10,7 @@ const MyComponent: React.FC = () => {
   const searchParams = useSearchParams();
   const code = searchParams.get("code") || "Not provided";
   console.log("🚀 ~ code:", code)
-
+  useRefreshToken(code as string);
   return (
     <div>
       <h1>Welcome to Spotify App</h1>
