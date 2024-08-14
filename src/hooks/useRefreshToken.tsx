@@ -1,6 +1,6 @@
+import { getToken, refreshSpotifyToken } from "@/app/API/authorize";
 import { useEffect, useState } from "react";
 
-import { getToken, refreshSpotifyToken } from "@/API/authorize";
 
 export default function useRefreshToken(code: string) {
   const [expiresIn, setExpiresIn] = useState(0);
