@@ -3,17 +3,18 @@
 import useRefreshToken from '@/hooks/useRefreshToken';
 import { useSession, signOut } from 'next-auth/react';
 import Link from 'next/link';
-import { useRouter } from "next/navigation";
+import { useSearchParams } from 'next/navigation';
 
 export default function HomePage() {
   // pages/users/[userId].js
 
-  const router = useRouter();
+  const searchParams = useSearchParams();
   // const { query } = router as any;
 
 
   // const { query } = router as { query?: any }; 
-  console.log("🚀 ~ HomePage ~ code:", window.location)
+  const code = searchParams.get('code')
+  console.log("🚀 ~ HomePage ~ code:", code)
   // useRefreshToken(query.code as string);
 
   return (
