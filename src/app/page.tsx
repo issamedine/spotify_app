@@ -1,33 +1,34 @@
 "use client";
 
-import useRefreshToken from '@/hooks/useRefreshToken';
-import { useSession, signOut } from 'next-auth/react';
-import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
+import useRefreshToken from "@/hooks/useRefreshToken";
+import { useSession, signOut } from "next-auth/react";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
-export default function HomePage() {
-  // pages/users/[userId].js
-
+const MyComponent: React.FC = () => {
   const searchParams = useSearchParams();
-  // const { query } = router as any;
-
-
-  // const { query } = router as { query?: any }; 
-  const code = searchParams.get('code')
-  console.log("🚀 ~ HomePage ~ code:", code)
-  // useRefreshToken(query.code as string);
+  const code = searchParams.get("code") || "Not provided";
+  console.log("🚀 ~ code:", code)
 
   return (
     <div>
       <h1>Welcome to Spotify App</h1>
-      {/* {router ? ( */}
-        <div>
-          <p>Signed in as </p>
-          <button>Sign out</button>
-        </div>
-      {/* ) : ( */}
-        <Link href="/signin">Sign in with Spotify</Link>
-      {/* )} */}
+      <div>
+        <p>Signed in as </p>
+        <button>Sign out</button>
+      </div>
+      <Link href="/signin">Sign in with Spotify</Link>
     </div>
+  );
+};
+
+export default function HomePage() {
+
+
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <MyComponent />
+    </Suspense>
   );
 }
