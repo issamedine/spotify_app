@@ -2,12 +2,17 @@
 
 import useRefreshToken from '@/hooks/useRefreshToken';
 import { useSession, signOut } from 'next-auth/react';
-import { usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export default function HomePage() {
-  const router = usePathname();
+  // pages/users/[userId].js
+
+  const router = useRouter();
+  const { query } = router as any;
+
+
   // const { query } = router as { query?: any }; 
-  console.log("🚀 ~ HomePage ~ code:", router)
+  console.log("🚀 ~ HomePage ~ code:", query?.code)
   // useRefreshToken(query.code as string);
 
   return (
