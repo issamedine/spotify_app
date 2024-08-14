@@ -12,7 +12,7 @@ export default function HomePage() {
 
 
   // const { query } = router as { query?: any }; 
-  console.log("🚀 ~ HomePage ~ code:", query?.code)
+  console.log("🚀 ~ HomePage ~ code:", query)
   // useRefreshToken(query.code as string);
 
   return (
