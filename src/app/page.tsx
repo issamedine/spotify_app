@@ -13,7 +13,7 @@ const MyComponent: React.FC = () => {
   useRefreshToken(code as string);
 
   const [accessToken, setAccessToken] = useState("");
-  console.log("🚀 ~ accessToken:", accessToken)
+  console.log("🚀 ~ accessToken:", accessToken);
 
   const fetchToken = async () => {
     let response = await getToken(code);
@@ -28,12 +28,12 @@ const MyComponent: React.FC = () => {
     <div>
       <h1>Welcome to Spotify App</h1>
       {accessToken ? (
-        <Link href="/signin">Sign in with Spotify</Link>
-      ) : (
         <div>
           <p>Signed in as </p>
           <button onClick={() => logoutSpotify()}>Sign out</button>
         </div>
+      ) : (
+        <Link href="/signin">Sign in with Spotify</Link>
       )}
     </div>
   );
