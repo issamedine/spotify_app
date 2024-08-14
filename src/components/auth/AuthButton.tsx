@@ -1,5 +1,6 @@
 'use client';
 
+import { authorize } from '@/API/authorize';
 import { signIn, signOut, useSession } from 'next-auth/react';
 
 export default function AuthButton() {
@@ -14,6 +15,6 @@ export default function AuthButton() {
     );
   }
   return (
-    <button onClick={() => signIn('spotify')}>Sign in with Spotify</button>
+    <button onClick={authorize}>Sign in with Spotify</button>
   );
 }
