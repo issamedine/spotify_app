@@ -9,20 +9,31 @@ import { getToken, logoutSpotify } from "./API/authorize";
 
 const MyComponent: React.FC = () => {
   const searchParams = useSearchParams();
-  const code = searchParams.get("code") || "Not provided";
+  const code = searchParams.get("code") || "";
   console.log("🚀 ~ code:", code);
   useRefreshToken(code as string);
+
+  const [accessToken, setAccessToken] = useState<string | null>("");
+
+
+  useEffect(() => {
+    if (window !== undefined) {
+      const codeVerifier = sessionStorage.getItem("code_verifier");
+      setAccessToken(codeVerifier);
+    }
+  }, [accessToken, code]);
+
 
   return (
     <div>
       <h1>Welcome to Spotify App</h1>
-      {code === "Not provided"? (
+      {(accessToken === "undefined" || accessToken === null) ? (
+        <Link href="/signin">Sign in with Spotify</Link>
+      ) : (
         <div>
           <p>Signed in as </p>
           <button onClick={() => logoutSpotify()}>Sign out</button>
         </div>
-      ) : (
-        <Link href="/signin">Sign in with Spotify</Link>
       )}
     </div>
   );

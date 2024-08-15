@@ -1,5 +1,6 @@
 const SPOTIFY_CLIENT_ID = `3738206533f14da59d6fed4e32c0c314`;
 const redirectUri = "https://spotify-app-eight-xi.vercel.app/";
+// const redirectUri = "http://localhost:3000/";
 
 function generateRandomString(length: number): string {
   let text = "";
@@ -38,51 +39,66 @@ if (typeof window !== "undefined") {
 // eslint-disable-next-line @typescript-eslint/require-await
 export const authorize = async () => {
   void generateCodeChallenge(codeVerifier).then((codeChallenge) => {
+    const scope = [
+      "user-read-private",
+      "user-read-email",
+      "streaming",
+      "user-read-playback-state",
+      "user-modify-playback-state",
+      "user-read-recently-played",   // Added for recently played tracks
+      "playlist-read-private",        // Added for accessing playlists
+    ].join(" ");
     const state: string = generateRandomString(16);
-    const scope =
-      "user-read-private user-read-email streaming user-read-playback-state user-modify-playback-state";
 
     sessionStorage.setItem("code_verifier", codeVerifier);
 
     const args = new URLSearchParams({
       response_type: "code",
       client_id: SPOTIFY_CLIENT_ID,
-      scope: scope,
+      scope: scope,  // Updated scope
       redirect_uri: redirectUri,
       state: state,
       code_challenge_method: "S256",
       code_challenge: codeChallenge,
     });
 
-    // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
     window.location.href = "https://accounts.spotify.com/authorize?" + args;
   });
 };
+
 
 export const getToken = async (code: string) => {
   const codeVerifier = sessionStorage.getItem("code_verifier");
 
   const body = new URLSearchParams({
-    grant_type: "authorization_code" || "",
-    code: code || "",
-    redirect_uri: redirectUri || "",
-    client_id: SPOTIFY_CLIENT_ID || "",
+    grant_type: "authorization_code",
+    code: code,
+    redirect_uri: redirectUri,
+    client_id: SPOTIFY_CLIENT_ID,
     code_verifier: codeVerifier ?? "",
   });
+
   try {
     const response = await fetch("https://accounts.spotify.com/api/token", {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
-      body: body,
+      body: body.toString(),  // Convert URLSearchParams to string
     });
+
+    if (!response.ok) {
+      const errorResponse = await response.json();
+      console.error("Token request error:", errorResponse);
+    }
 
     return response.json();
   } catch (error) {
+    console.error("Fetch token error:", error);
     window.location.href = "/";
   }
 };
+
 
 export const refreshSpotifyToken = async (refresh_token: string) => {
   const body = new URLSearchParams({
@@ -112,7 +128,8 @@ export const logoutSpotify = () => {
   sessionStorage.removeItem("code_verifier");
 
   // Redirect to Spotify logout and then to your app's home page
-  const logoutUrl =
-    "https://accounts.spotify.com/en/logout?continue=https://spotify-app-eight-xi.vercel.app/";
-  window.location.href = logoutUrl;
+  // const logoutUrl =
+  //   "https://accounts.spotify.com/en/logout?continue=https://spotify-app-eight-xi.vercel.app/";
+  window.location.href = '/';
 };
+
