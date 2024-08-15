@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import React, { useEffect, useState } from 'react';
-import { getRecentTracks } from '../API/recently_played_tracks';
+import { useEffect, useState } from "react";
+import { getRecentTracks } from "../API/recently_played_tracks";
 
 const RecentlyPlayedTracks = () => {
   const [tracks, setTracks] = useState<any[]>([]);
 
   useEffect(() => {
     const fetchRecentlyPlayedTracks = async () => {
-      const token = sessionStorage.getItem('access_token'); // Ensure the token is stored correctly
+      const token = sessionStorage.getItem('access_token');
       if (token) {
         const fetchedTracks = await getRecentTracks(token);
         setTracks(fetchedTracks);
@@ -25,6 +25,13 @@ const RecentlyPlayedTracks = () => {
         {tracks?.map((track) => (
           <li key={track.played_at}>
             {track.track.name} by {track.track.artists.map((artist: any) => artist.name).join(', ')}
+            <iframe
+              src={`https://open.spotify.com/embed/track/${track.track.id}`}
+              width="300"
+              height="80"
+              frameBorder="0"
+              allow="encrypted-media"
+            ></iframe>
           </li>
         ))}
       </ul>
@@ -32,4 +39,5 @@ const RecentlyPlayedTracks = () => {
   );
 };
 
-export default RecentlyPlayedTracks;
+
+export default RecentlyPlayedTracks

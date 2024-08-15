@@ -4,8 +4,10 @@ import useRefreshToken from "@/hooks/useRefreshToken";
 import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { getToken, logoutSpotify } from "./API/authorize";
+import SpotifyPlayer from "@/components/SpotifyPlayer";
+import PlaybackControls from "@/components/PlaybackControls";
 
 const MyComponent: React.FC = () => {
   const searchParams = useSearchParams();
@@ -15,7 +17,6 @@ const MyComponent: React.FC = () => {
 
   const [accessToken, setAccessToken] = useState<string | null>("");
 
-
   useEffect(() => {
     if (window !== undefined) {
       const codeVerifier = sessionStorage.getItem("code_verifier");
@@ -23,16 +24,18 @@ const MyComponent: React.FC = () => {
     }
   }, [accessToken, code]);
 
+  const playerRef = useRef<any>(null);
 
   return (
     <div>
       <h1>Welcome to Spotify App</h1>
-      {(accessToken === "undefined" || accessToken === null) ? (
+      {accessToken === "undefined" || accessToken === null ? (
         <Link href="/signin">Sign in with Spotify</Link>
       ) : (
         <div>
           <p>Signed in as </p>
           <button onClick={() => logoutSpotify()}>Sign out</button>
+
         </div>
       )}
     </div>

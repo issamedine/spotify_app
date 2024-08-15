@@ -17,9 +17,11 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  
   return (
     <html lang="en">
+      <head>
+        <script src="https://sdk.scdn.co/spotify-player.js"></script>
+      </head>
       <body className={inter.className}>
         <SessionProvider>{children}</SessionProvider>
       </body>

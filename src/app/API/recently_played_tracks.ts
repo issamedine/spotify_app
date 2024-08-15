@@ -14,7 +14,6 @@
 // };
 
 export const getRecentTracks = async (accessToken: string, limit: number = 50) => {
-  console.log("🚀 ~ getRecentTracks ~ accessToken:", accessToken)
   const url = `https://api.spotify.com/v1/me/player/recently-played?limit=${limit}`;
 
   try {
