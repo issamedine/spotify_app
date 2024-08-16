@@ -1,51 +1,31 @@
 "use client";
 
-import useRefreshToken from "@/hooks/useRefreshToken";
-import { useSession, signOut } from "next-auth/react";
-import Link from "next/link";
-import { useSearchParams } from "next/navigation";
-import { Suspense, useEffect, useRef, useState } from "react";
-import { getToken, logoutSpotify } from "./API/authorize";
-import SpotifyPlayer from "@/components/SpotifyPlayer";
-import PlaybackControls from "@/components/PlaybackControls";
+import { useAppState } from "@/context/MyContext";
+import styles from "./homepage.module.scss";
+import Home from "@/components/(body)/home";
+import BrowseAll from "@/components/(body)/browse-all";
+import Library from "@/components/(body)/library";
 
-const MyComponent: React.FC = () => {
-  const searchParams = useSearchParams();
-  const code = searchParams.get("code") || "";
-  console.log("🚀 ~ code:", code);
-  useRefreshToken(code as string);
+interface DisplayContent {
+  home: () => JSX.Element;
+  search: () => JSX.Element;
+  library: () => JSX.Element;
+}
 
-  const [accessToken, setAccessToken] = useState<string | null>("");
+const HomePage: React.FC = () => {
+  const { navbarActive } = useAppState();
 
-  useEffect(() => {
-    if (window !== undefined) {
-      const codeVerifier = sessionStorage.getItem("code_verifier");
-      setAccessToken(codeVerifier);
-    }
-  }, [accessToken, code]);
-
-  const playerRef = useRef<any>(null);
+  const displayContent: DisplayContent = {
+    home: () => <Home />,
+    search: () => <BrowseAll />,
+    library: () => <Library />,
+  };
 
   return (
-    <div>
-      <h1>Welcome to Spotify App</h1>
-      {accessToken === "undefined" || accessToken === null ? (
-        <Link href="/signin">Sign in with Spotify</Link>
-      ) : (
-        <div>
-          <p>Signed in as </p>
-          <button onClick={() => logoutSpotify()}>Sign out</button>
-
-        </div>
-      )}
-    </div>
+    <main className={styles.container_body}>
+      {displayContent[navbarActive as keyof DisplayContent]()}
+    </main>
   );
 };
 
-export default function HomePage() {
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <MyComponent />
-    </Suspense>
-  );
-}
+export default HomePage;

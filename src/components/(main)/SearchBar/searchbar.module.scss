@@ -1,0 +1,51 @@
+@import '../../../app/styles/variables';
+
+.container_searchbar {
+    background-color: $secondary-color;
+    width: calc(100vw - 275px);
+    position: fixed;
+    right: 0;
+    top: 0;
+    padding: 0 30px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .search_input {
+        position: relative;
+
+        input {
+            border: none;
+            border-radius: 20px;
+            height: 30px;
+            padding: 0 45px;
+            outline: none;
+        }
+
+        svg {
+            position: absolute;
+            left: 10px;
+            top: 3px;
+            color: $primary-color;
+            font-size: 25px;
+        }
+    }
+
+    .auth_btn {
+        button {
+            border: none;
+            background-color: #fff;
+            padding: 15px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: 0.2s all;
+
+            &:hover {
+                background-color: #818181;
+                color: #fff;
+                transition: 0.2s all;
+            }
+        }
+    }
+}

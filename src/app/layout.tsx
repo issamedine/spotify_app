@@ -2,8 +2,12 @@
 
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
+import "../app/styles/global.css";
 import { SessionProvider } from "next-auth/react";
+import { AppStateProvider } from "@/context/MyContext";
+import NavBar from "@/components/(main)/NavBar";
+import SearchBar from "@/components/(main)/SearchBar";
+import PlayTrack from "@/components/(main)/PlayTrack";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,13 +22,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <head>
-        <script src="https://sdk.scdn.co/spotify-player.js"></script>
-      </head>
-      <body className={inter.className}>
-        <SessionProvider>{children}</SessionProvider>
-      </body>
-    </html>
+    <AppStateProvider>
+      <html lang="en">
+        <head>
+          <script src="https://sdk.scdn.co/spotify-player.js"></script>
+        </head>
+        <body className={inter.className}>
+          <SessionProvider>
+            <NavBar />
+            <SearchBar />
+            <PlayTrack />
+            {children}
+          </SessionProvider>
+        </body>
+      </html>
+    </AppStateProvider>
   );
 }

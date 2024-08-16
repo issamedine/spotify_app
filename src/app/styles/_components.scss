@@ -1,0 +1,25 @@
+// src/app/styles/_components.scss
+
+.button {
+    background-color: $secondary-color;
+    color: $primary-color;
+    padding: $spacing-unit / 2 $spacing-unit;
+    border: 1px solid $primary-color;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: 0.3s all;
+
+    &:hover {
+        background-color: darken($secondary-color, 10%);
+        border: 1px solid darken($secondary-color, 10%);
+        transition: 0.3s all;
+    }
+}
+
+.card {
+    background-color: white;
+    border: 1px solid #ddd;
+    padding: $spacing-unit;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}

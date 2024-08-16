@@ -1,0 +1,35 @@
+// src/app/styles/_base.scss
+
+// Reset
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+// Typography
+body {
+    // font-family: $font-primary;
+    font-size: $font-size-base;
+    color: $text-color;
+    line-height: 1.6;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: $text-color;
+    margin-bottom: $spacing-unit / 2;
+}
+
+a {
+    color: $secondary-color;
+    text-decoration: none;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}

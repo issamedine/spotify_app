@@ -1,0 +1,19 @@
+// src/app/styles/_layout.scss
+
+.container {
+    // max-width: 1200px;
+    // margin: 0 auto;
+    padding: $spacing-unit;
+
+    @include respond-to(small) {
+        padding: $spacing-unit / 2;
+    }
+}
+
+.header,
+.footer {
+    background-color: $primary-color;
+    color: white;
+    padding: $spacing-unit;
+    text-align: center;
+}
