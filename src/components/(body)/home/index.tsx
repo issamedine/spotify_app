@@ -1,12 +1,8 @@
-import React from 'react'
-import PlaylistDisplay from './PlaylistDisplay'
+import React from "react";
+import PlaylistDisplay from "./PlaylistDisplay";
 
 function Home() {
-  return (
-    <div>
-      <PlaylistDisplay />
-    </div>
-  )
+  return <PlaylistDisplay />;
 }
 
-export default Home
+export default Home;

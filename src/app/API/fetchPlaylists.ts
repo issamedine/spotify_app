@@ -17,3 +17,4 @@ export const fetchPlaylists = async (query: string, token: string) => {
   const data = await response.json();
   return data.playlists.items;
 };
+

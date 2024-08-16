@@ -2,6 +2,8 @@ import { fetchPlaylists } from "@/app/API/fetchPlaylists";
 import { useEffect, useState } from "react";
 import styles from "./playlist-display.module.scss";
 import Image from "next/image";
+import { fetchSpecificPlaylist } from "@/app/API/fetchSpecificPlaylist";
+import Link from "next/link";
 
 interface PlaylistImage {
   url: string;
@@ -63,7 +65,11 @@ const PlaylistDisplay: React.FC = () => {
         {focusPlaylists.map((playlist, index) => {
           if (!showAllFocus && index > 4) return;
           return (
-            <div key={playlist.id} className={styles.item_playlist}>
+            <Link
+              key={playlist.id}
+              className={styles.item_playlist}
+              href={`/${playlist.id}`}
+            >
               {playlist.images[0] && (
                 <div className={styles.image_wrapper}>
                   <Image
@@ -80,7 +86,7 @@ const PlaylistDisplay: React.FC = () => {
                   {stripHTML(playlist.description)}
                 </div>
               </div>
-            </div>
+            </Link>
           );
         })}
       </div>
