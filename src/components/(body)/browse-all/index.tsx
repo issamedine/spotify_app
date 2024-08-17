@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getSpotifyCategories } from "@/app/API/browse";
 import { SpotifyCategory } from "@/types/category";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 const fetchCategories = async (token: string | null) => {
   if (!token) {
@@ -13,7 +14,15 @@ const fetchCategories = async (token: string | null) => {
 };
 
 const BrowseAll: React.FC = () => {
-  const token = sessionStorage.getItem("access_token");
+  const [token, setToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      // Browser-only code
+      const storedToken = sessionStorage.getItem("access_token");
+      setToken(storedToken);
+    }
+  }, []);
 
   const { data: categories = [], error } = useQuery({
     queryKey: ["spotifyCategories"],
