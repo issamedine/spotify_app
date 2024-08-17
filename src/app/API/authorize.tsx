@@ -1,6 +1,6 @@
 const SPOTIFY_CLIENT_ID = `3738206533f14da59d6fed4e32c0c314`;
-const REDIRECTURI = "https://spotify-app-eight-xi.vercel.app/";
-// const REDIRECTURI = "http://localhost:3000/";
+// const REDIRECTURI = "https://spotify-app-eight-xi.vercel.app/";
+const REDIRECTURI = "http://localhost:3000/";
 
 function generateRandomString(length: number): string {
   let text = "";

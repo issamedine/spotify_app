@@ -9,6 +9,8 @@ import { Playlist } from "@/types/specificPlaylistTypes";
 import Track from "@/components/ui/track";
 import { stripHTML } from "@/helpers/deleteHTML";
 import { getEmbedUrl } from "@/helpers/embedUrl";
+import LoadingUI from "@/components/ui/loading";
+import ErrorUI from "@/components/ui/error";
 
 const TracksDisplayPage: React.FC<{ params: { idPlaylist: string } }> = ({
   params,
@@ -36,13 +38,13 @@ const TracksDisplayPage: React.FC<{ params: { idPlaylist: string } }> = ({
   });
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <LoadingUI />;
   }
-
+  
   if (error) {
-    return <div>Error: {error.message}</div>;
+    return <ErrorUI />;
   }
-
+  
   if (!playlist) {
     return <div>No playlist found</div>;
   }

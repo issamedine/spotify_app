@@ -1,52 +1,37 @@
 "use client";
 
-import { getCategoryPlaylists, getSpotifyCategories } from "@/app/API/browse";
-import { SpotifyCategory, SpotifyPlaylist } from "@/types/category";
-import { useEffect, useState } from "react";
+import { getCategoryPlaylists } from "@/app/API/browse";
+import { SpotifyPlaylist } from "@/types/category";
+import { useQuery } from "@tanstack/react-query";
 import styles from "./specific-category.module.scss";
-import Link from "next/link";
 import PlaylistCard from "@/components/ui/playlist-card";
+import LoadingUI from "@/components/ui/loading";
+import ErrorUI from "@/components/ui/error";
 
-const CategoryPlaylist: React.FC = ({ params }: any) => {
-  const [categories, setCategories] = useState<SpotifyCategory[]>([]);
-  const [selectedCategory, setSelectedCategory] =
-    useState<SpotifyCategory | null>(null);
-  const [playlists, setPlaylists] = useState<SpotifyPlaylist[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchCategories = async () => {
+const CategoryPlaylist: React.FC<any> = ({ params }) => {
+  // Use React Query's useQuery with the correct v5 object signature
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ["categoryPlaylists", params.idCategory], // Cache key
+    queryFn: async () => {
       const token = sessionStorage.getItem("access_token");
-
-      try {
-        const token = sessionStorage.getItem("access_token");
-        const fetchedPlaylists = await getCategoryPlaylists(
-          token,
-          params.idCategory
-        );
-        setPlaylists(fetchedPlaylists);
-      } catch (err) {
-        console.error("Error fetching category playlists:", err);
-        setError("Failed to fetch playlists");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchCategories();
-  }, []);
+      return await getCategoryPlaylists(token, params.idCategory);
+    },
+    staleTime: 5 * 60 * 1000, // Data is fresh for 5 minutes
+    // cacheTime: 10 * 60 * 1000, // Cache data for 10 minutes
+  });
 
   return (
     <div className={styles.container_specific_category}>
       <div>
-        <h2>Playlists for </h2>
-        {loading ? (
-          <p>Loading...</p>
+        <h2>Playlists for Category</h2>
+        {isLoading ? (
+          <LoadingUI />
+        ) : isError ? (
+          <ErrorUI />
         ) : (
           <div className={styles.wrapper_playlist}>
-            {playlists.map((playlist) => (
-              <PlaylistCard playlist={playlist} />
+            {data?.map((playlist) => (
+              <PlaylistCard key={playlist.id} playlist={playlist} />
             ))}
           </div>
         )}

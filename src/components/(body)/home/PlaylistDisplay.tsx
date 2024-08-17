@@ -5,6 +5,7 @@ import { fetchPlaylists } from "@/app/API/fetchPlaylists";
 import styles from "./playlist-display.module.scss";
 import { useEffect, useState } from "react";
 import PlaylistCard from "@/components/ui/playlist-card";
+import LoadingUI from "@/components/ui/loading";
 
 const fetchPlaylistsData = async (type: string, token: string) => {
   return fetchPlaylists(type, token);
@@ -29,26 +30,33 @@ const PlaylistDisplay: React.FC = () => {
   }, []);
 
   // Fetch focus playlists
-  const { data: focusPlaylists = [], error: focusPlaylistsError } = useQuery({
+  const {
+    data: focusPlaylists = [],
+    error: focusPlaylistsError,
+    isLoading: focusPlaylistsIsLoading,
+  } = useQuery({
     queryKey: ["focusPlaylists", token],
     queryFn: () => fetchPlaylistsData("Focus", token!),
     enabled: !!token, // Only run query if token is available
   });
 
   // Fetch spotify playlists
-  const { data: spotifyPlaylists = [], error: spotifyPlaylistsError } =
-    useQuery({
-      queryKey: ["spotifyPlaylists", token],
-      queryFn: () => fetchPlaylistsData("Spotify Playlist", token!),
-      enabled: !!token, // Only run query if token is available
-    });
+  const {
+    data: spotifyPlaylists = [],
+    error: spotifyPlaylistsError,
+    isLoading: spotifyPlaylistsIsLoading,
+  } = useQuery({
+    queryKey: ["spotifyPlaylists", token],
+    queryFn: () => fetchPlaylistsData("Spotify Playlist", token!),
+    enabled: !!token, // Only run query if token is available
+  });
 
   if (focusPlaylistsError || spotifyPlaylistsError) {
     return <div>Error fetching playlists</div>;
   }
 
   if (focusPlaylists.length === 0 || spotifyPlaylists.length === 0) {
-    return <div>You should connect to app</div>;
+    return <LoadingUI />;
   }
 
   return (
