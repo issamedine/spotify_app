@@ -1,12 +1,18 @@
 import { authorize, logoutSpotify } from "@/app/API/authorize";
 import useRefreshToken from "@/hooks/useRefreshToken";
 import { useSearchParams } from "next/navigation";
-import React, { ChangeEvent, useCallback, useEffect, useState } from "react";
+import React, {
+  ChangeEvent,
+  Suspense,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import styles from "./searchbar.module.scss";
 import { IoIosSearch } from "react-icons/io";
 import { useAppState } from "@/context/MyContext";
 
-function SearchBar() {
+function SearchSpotify() {
   const searchParams = useSearchParams();
   const code = searchParams.get("code") || "";
   useRefreshToken(code as string);
@@ -68,4 +74,10 @@ function SearchBar() {
   );
 }
 
-export default SearchBar;
+export default function SearchBar() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <SearchSpotify />
+    </Suspense>
+  );
+}
