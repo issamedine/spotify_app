@@ -1,18 +1,23 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { searchSpotify } from "../API/searchSpotify";
 
 const SearchSpotifyView = () => {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<any>(null);
-  const accessToken = sessionStorage.getItem("access_token"); // Ensure this is available
+  const [accessToken, setAccessToken] = useState<string | null>(null);
+
+  // Retrieve the access token only on the client side
+  useEffect(() => {
+    const token = sessionStorage.getItem("access_token");
+    setAccessToken(token);
+  }, []);
 
   const handleSearch = async () => {
     if (!query || !accessToken) return;
 
-    const data = await searchSpotify(accessToken, query, "track,playlist"); // Adjust the type as needed
-    setResults(data);
+    const data = await searchSpotify(accessToken, query, "track,playlist"); // Adjust the type as neededsetResults(data);
   };
 
   return (
@@ -36,7 +41,6 @@ const SearchSpotifyView = () => {
               </li>
             ))}
           </ul>
-
           <h3>Playlists:</h3>
           <ul>
             {results.playlists.items.map((playlist: any) => (
