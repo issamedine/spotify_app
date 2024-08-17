@@ -5,6 +5,8 @@ import { useAppState } from "@/context/MyContext";
 import { useEffect, useState } from "react";
 import Track from "@/components/ui/track";
 import { getEmbedUrl } from "@/helpers/embedUrl";
+import LoadingUI from "@/components/ui/loading";
+import ErrorUI from "@/components/ui/error";
 
 const fetchSearchResults = async (token: string, query: string) => {
   const data = await searchSpotify(token, query, "track,playlist");
@@ -24,7 +26,11 @@ const SpotifySearch: React.FC = () => {
     }
   }, []);
 
-  const { data: tracks = [], error } = useQuery({
+  const {
+    data: tracks = [],
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: ["spotifySearch", searchBar],
     queryFn: () => {
       if (token && searchBar) {
@@ -41,8 +47,12 @@ const SpotifySearch: React.FC = () => {
     setCurrentTrackUri(uri);
   };
 
+  if (isLoading) {
+    return <LoadingUI />;
+  }
+
   if (error) {
-    return <div>Error fetching search results</div>;
+    return <ErrorUI />;
   }
 
   return (

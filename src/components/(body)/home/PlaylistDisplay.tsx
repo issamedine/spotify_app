@@ -6,6 +6,7 @@ import styles from "./playlist-display.module.scss";
 import { useEffect, useState } from "react";
 import PlaylistCard from "@/components/ui/playlist-card";
 import LoadingUI from "@/components/ui/loading";
+import ErrorUI from "@/components/ui/error";
 
 const fetchPlaylistsData = async (type: string, token: string) => {
   return fetchPlaylists(type, token);
@@ -36,7 +37,7 @@ const PlaylistDisplay: React.FC = () => {
     isLoading: focusPlaylistsIsLoading,
   } = useQuery({
     queryKey: ["focusPlaylists", token],
-    queryFn: () => fetchPlaylistsData("Focus", token!),
+    queryFn: () => fetchPlaylists("Focus", token!),
     enabled: !!token, // Only run query if token is available
   });
 
@@ -47,16 +48,16 @@ const PlaylistDisplay: React.FC = () => {
     isLoading: spotifyPlaylistsIsLoading,
   } = useQuery({
     queryKey: ["spotifyPlaylists", token],
-    queryFn: () => fetchPlaylistsData("Spotify Playlist", token!),
+    queryFn: () => fetchPlaylists("Spotify Playlist", token!),
     enabled: !!token, // Only run query if token is available
   });
 
   if (focusPlaylistsError || spotifyPlaylistsError) {
-    return <div>Error fetching playlists</div>;
+    return <ErrorUI />;
   }
 
   if (focusPlaylists.length === 0 || spotifyPlaylists.length === 0) {
-    return <LoadingUI />;
+    return <div>You should connect</div>;
   }
 
   return (
