@@ -31,7 +31,6 @@ export const fetchSpecificPlaylist = async (query: string, token: string) => {
 
   try {
     const playlist = await fetchPlaylistById(query, token);
-    console.log("🚀 ~ fetchSpecificPlaylist ~ playlist:", playlist);
     return playlist;
   } catch (error) {
     console.error("Failed to fetch specific playlist:", error);

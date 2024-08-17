@@ -8,6 +8,7 @@ import { AppStateProvider } from "@/context/MyContext";
 import NavBar from "@/components/(main)/NavBar";
 import SearchBar from "@/components/(main)/SearchBar";
 import PlayTrack from "@/components/(main)/PlayTrack";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,6 +22,8 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const queryClient = new QueryClient();
+
   return (
     <AppStateProvider>
       <html lang="en">
@@ -28,12 +31,14 @@ export default function RootLayout({
           <script src="https://sdk.scdn.co/spotify-player.js"></script>
         </head>
         <body className={inter.className}>
-          <SessionProvider>
-            <NavBar />
-            <SearchBar />
-            <PlayTrack />
-            {children}
-          </SessionProvider>
+          <QueryClientProvider client={queryClient}>
+            <SessionProvider>
+              <NavBar />
+              <SearchBar />
+              <PlayTrack />
+              {children}
+            </SessionProvider>
+          </QueryClientProvider>
         </body>
       </html>
     </AppStateProvider>

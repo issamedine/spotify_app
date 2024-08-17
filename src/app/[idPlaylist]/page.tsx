@@ -1,68 +1,57 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { fetchSpecificPlaylist } from "../API/fetchSpecificPlaylist";
 import styles from "./specific-playlist.module.scss";
 import SpotifyEmbed from "@/components/SpotifyEmbed";
+import { useState } from "react";
+import { Playlist } from "@/types/specificPlaylistTypes";
 
 const stripHTML = (html: string): string => {
   const doc = new DOMParser().parseFromString(html, "text/html");
   return doc.body.textContent || "";
 };
 
-type Artist = {
-  name: string;
-};
-
-type Track = {
-  id: string;
-  name: string;
-  artists: Artist[];
-};
-
-type PlaylistTrack = {
-  track: Track;
-};
-
-type PlaylistImage = {
-  url: string;
-};
-
-type Playlist = {
-  name: string;
-  description: string;
-  images: PlaylistImage[];
-  tracks: {
-    items: PlaylistTrack[];
-  };
-};
-
-const PlaylistDisplay: React.FC<{ params: any }> = ({ params }) => {
-  const [playlist, setPlaylist] = useState<Playlist | null>(null);
+const PlaylistDisplay: React.FC<{ params: { idPlaylist: string } }> = ({
+  params,
+}) => {
   const [currentTrackUri, setCurrentTrackUri] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchPlaylistData = async () => {
+  const {
+    data: playlist,
+    error,
+    isLoading,
+  }: UseQueryResult<Playlist, Error> = useQuery({
+    queryKey: ["playlist", params.idPlaylist],
+    queryFn: async () => {
       const token = sessionStorage.getItem("access_token");
-      if (token) {
-        const fetchedPlaylist = await fetchSpecificPlaylist(
-          params.idPlaylist,
-          token
-        );
-        setPlaylist(fetchedPlaylist);
+      if (!token) {
+        throw new Error("Access token is missing");
       }
-    };
+      return await fetchSpecificPlaylist(params.idPlaylist, token);
+    },
+    staleTime: 5 * 60 * 1000, // Données fraîches pendant 5 minutes
+    // cacheTime: 10 * 60 * 1000, // Cache pendant 10 minutes après utilisation
+    refetchOnWindowFocus: true, // Rafraîchir les données lorsque la fenêtre regagne le focus
+    refetchOnReconnect: true, // Rafraîchir les données lorsque la connexion est rétablie
+    retry: 3, // Réessayer jusqu'à 3 fois en cas d'échec
+  });
 
-    fetchPlaylistData();
-  }, [params.idPlaylist]);
-
-  if (!playlist) {
+  if (isLoading) {
     return <div>Loading...</div>;
   }
 
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
+
+  if (!playlist) {
+    return <div>No playlist found</div>;
+  }
+
   const embedUrl = currentTrackUri
-  ? `https://open.spotify.com/embed/track/${currentTrackUri.split(":").pop()}`
-  : "";
+    ? `https://open.spotify.com/embed/track/${currentTrackUri.split(":").pop()}`
+    : "";
 
   const handleTrackClick = (uri: string) => {
     setCurrentTrackUri(uri);
@@ -83,7 +72,10 @@ const PlaylistDisplay: React.FC<{ params: any }> = ({ params }) => {
       <p>{stripHTML(playlist.description)}</p>
       <ul>
         {playlist.tracks.items.map((item: any) => (
-          <li key={item.track.id} onClick={() => handleTrackClick(item.track.uri)}>
+          <li
+            key={item.track.id}
+            onClick={() => handleTrackClick(item.track.uri)}
+          >
             {item.track.name} by{" "}
             {item.track.artists.map((artist: any) => artist.name).join(", ")}
           </li>

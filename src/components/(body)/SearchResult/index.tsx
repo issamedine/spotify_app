@@ -1,30 +1,31 @@
+import { useQuery } from "@tanstack/react-query";
 import { searchSpotify } from "@/app/API/searchSpotify";
 import SpotifyEmbed from "@/components/SpotifyEmbed";
 import { useAppState } from "@/context/MyContext";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
+const fetchSearchResults = async (token: string, query: string) => {
+  const data = await searchSpotify(token, query, "track,playlist");
+  return data.tracks.items;
+};
+
 const SpotifySearch: React.FC = () => {
-  const [tracks, setTracks] = useState<any[]>([]);
-  console.log("🚀 ~ tracks:", tracks)
   const [currentTrackUri, setCurrentTrackUri] = useState<string | null>(null);
   const { searchBar } = useAppState();
 
-  useEffect(() => {
-    const fetchSearchSpotify = async () => {
-      const token = sessionStorage.getItem("access_token");
-      if (token && searchBar) {
-        try {
-          const data = await searchSpotify(token, searchBar, "track,playlist");
-          setTracks(data.tracks.items);
-        } catch (error) {
-          console.error("Error fetching search results:", error);
-        }
-      }
-    };
+  const token = sessionStorage.getItem("access_token");
 
-    fetchSearchSpotify();
-  }, [searchBar]);
+  const { data: tracks = [], error } = useQuery({
+    queryKey: ["spotifySearch", searchBar],
+    queryFn: () => {
+      if (token && searchBar) {
+        return fetchSearchResults(token, searchBar);
+      }
+      return [];
+    },
+    enabled: !!token && !!searchBar, // Only run query if token and searchBar are available
+  });
 
   const embedUrl = currentTrackUri
     ? `https://open.spotify.com/embed/track/${currentTrackUri.split(":").pop()}`
@@ -34,25 +35,37 @@ const SpotifySearch: React.FC = () => {
     setCurrentTrackUri(uri);
   };
 
+  if (error) {
+    return <div>Error fetching search results</div>;
+  }
+
   return (
     <div>
       <div>
         {tracks.length > 0 ? (
           <ul>
-            {tracks.map((track) => (
+            {tracks.map((track: any) => (
               <li
                 onClick={() => handleTrackClick(track.uri)}
                 key={track.id}
+                style={{
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                }}
               >
                 <img
                   src={track.album.images[0].url}
                   alt={track.name}
                   width="50"
+                  style={{ marginRight: "10px" }}
                 />
-                <p>{track.name}</p>
-                <p>
-                  {track.artists.map((artist: any) => artist.name).join(", ")}
-                </p>
+                <div>
+                  <p>{track.name}</p>
+                  <p>
+                    {track.artists.map((artist: any) => artist.name).join(", ")}
+                  </p>
+                </div>
               </li>
             ))}
           </ul>
@@ -60,7 +73,7 @@ const SpotifySearch: React.FC = () => {
           <p>No results found</p>
         )}
       </div>
-      {<SpotifyEmbed embedUrl={embedUrl} />}
+      <SpotifyEmbed embedUrl={embedUrl} />
     </div>
   );
 };

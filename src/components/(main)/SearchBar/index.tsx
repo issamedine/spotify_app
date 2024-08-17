@@ -1,6 +1,6 @@
 import { authorize, logoutSpotify } from "@/app/API/authorize";
 import useRefreshToken from "@/hooks/useRefreshToken";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import React, {
   ChangeEvent,
   Suspense,
@@ -13,6 +13,9 @@ import { IoIosSearch } from "react-icons/io";
 import { useAppState } from "@/context/MyContext";
 
 function SearchSpotify() {
+  const router = useRouter();
+  const pathname = usePathname();
+
   const searchParams = useSearchParams();
   const code = searchParams.get("code") || "";
   useRefreshToken(code as string);
@@ -26,7 +29,7 @@ function SearchSpotify() {
     }
   }, [accessToken, code]);
 
-  const { setSearchBar } = useAppState();
+  const { searchBar, setSearchBar } = useAppState();
 
   // Debounce function with TypeScript
   const debounce = (func: (...args: any[]) => void, delay: number) => {
@@ -38,7 +41,12 @@ function SearchSpotify() {
   };
 
   // Debounced search handler
+  if (searchBar.length > 0)
+    router.push("/search");
   const handleChangeSearch = useCallback(
+    /**
+     *TODO
+     */
     debounce((e: ChangeEvent<HTMLInputElement>) => {
       setSearchBar(e.target.value);
     }, 3000), // 500ms delay

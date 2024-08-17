@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import styles from "./navbar.module.scss";
 import Image from "next/image";
 import { AiOutlineSpotify } from "react-icons/ai";
@@ -8,22 +8,16 @@ import { RiAddBoxFill } from "react-icons/ri";
 import { BiSolidHeartSquare } from "react-icons/bi";
 import { useAppState } from "@/context/MyContext";
 import { TbWorld } from "react-icons/tb";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 
-function NavBar() {
+function MyComponent() {
   const router = useRouter();
+  const pathname = usePathname();
 
-  const {
-    navbarActive,
-    setNavbarActive,
-    searchBar,
-    setSearchBar,
-    playTrack,
-    setPlayTrack,
-  } = useAppState();
+  const { searchBar, setSearchBar } = useAppState();
 
   const goTo = (direction: string) => {
-    setNavbarActive(direction);
+    setSearchBar("");
     router.push(`/${direction}`);
   };
 
@@ -37,7 +31,7 @@ function NavBar() {
         <div className={styles.first_section}>
           <div className={styles.items}>
             <div
-              className={`${navbarActive === "home" ? styles.item_active : ""}`}
+              className={`${pathname === "/home" ? styles.item_active : ""}`}
               onClick={() => goTo("home")}
             >
               <IoHomeOutline />
@@ -45,7 +39,9 @@ function NavBar() {
             </div>
             <div
               className={`${
-                navbarActive === "search" ? styles.item_active : ""
+                pathname === "/search" || pathname.includes("specific-category")
+                  ? styles.item_active
+                  : ""
               }`}
               onClick={() => goTo("search")}
             >
@@ -53,9 +49,7 @@ function NavBar() {
               <span>Search</span>
             </div>
             <div
-              className={`${
-                navbarActive === "library" ? styles.item_active : ""
-              }`}
+              className={`${pathname === "/library" ? styles.item_active : ""}`}
               onClick={() => goTo("library")}
             >
               <IoLibraryOutline />
@@ -65,17 +59,13 @@ function NavBar() {
 
           <div className={styles.items}>
             <div
-              className={`${
-                navbarActive === "create" ? styles.item_active : ""
-              }`}
+              className={`${pathname === "/create" ? styles.item_active : ""}`}
             >
               <RiAddBoxFill />
               <span>Create Playlist</span>
             </div>
             <div
-              className={`${
-                navbarActive === "liked" ? styles.item_active : ""
-              }`}
+              className={`${pathname === "/liked" ? styles.item_active : ""}`}
             >
               <BiSolidHeartSquare />
               <span>Liked Songs</span>
@@ -103,4 +93,10 @@ function NavBar() {
   );
 }
 
-export default NavBar;
+export default function NavBar() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <MyComponent />
+    </Suspense>
+  );
+}
