@@ -9,6 +9,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  z-index: 1;
 }
 
 .container_searchbar .search_input {
@@ -18,15 +19,16 @@
 .container_searchbar .search_input input {
   border: none;
   border-radius: 20px;
-  height: 30px;
-  padding: 0 45px;
+  height: 35px;
+  width: 280px;
+  padding: 0 10px 0 50px;
   outline: none;
 }
 
 .container_searchbar .search_input svg {
   position: absolute;
   left: 10px;
-  top: 3px;
+  top: 4px;
   color: #000000;
   font-size: 25px;
 }

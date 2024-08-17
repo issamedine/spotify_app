@@ -8,8 +8,11 @@ import { RiAddBoxFill } from "react-icons/ri";
 import { BiSolidHeartSquare } from "react-icons/bi";
 import { useAppState } from "@/context/MyContext";
 import { TbWorld } from "react-icons/tb";
+import { useRouter } from "next/navigation";
 
 function NavBar() {
+  const router = useRouter();
+
   const {
     navbarActive,
     setNavbarActive,
@@ -18,20 +21,24 @@ function NavBar() {
     playTrack,
     setPlayTrack,
   } = useAppState();
-  
+
+  const goTo = (direction: string) => {
+    setNavbarActive(direction);
+    router.push(`/${direction}`);
+  };
+
   return (
     <div className={styles.container_navbar}>
       <div className={styles.logo}>
         <AiOutlineSpotify />
         <span>Spotify</span>
-       
       </div>
       <div className={styles.content_nav}>
         <div className={styles.first_section}>
           <div className={styles.items}>
             <div
               className={`${navbarActive === "home" ? styles.item_active : ""}`}
-              onClick={() => setNavbarActive("home")}
+              onClick={() => goTo("home")}
             >
               <IoHomeOutline />
               <span>Home</span>
@@ -40,7 +47,7 @@ function NavBar() {
               className={`${
                 navbarActive === "search" ? styles.item_active : ""
               }`}
-              onClick={() => setNavbarActive("search")}
+              onClick={() => goTo("search")}
             >
               <CiSearch />
               <span>Search</span>
@@ -49,7 +56,7 @@ function NavBar() {
               className={`${
                 navbarActive === "library" ? styles.item_active : ""
               }`}
-              onClick={() => setNavbarActive("library")}
+              onClick={() => goTo("library")}
             >
               <IoLibraryOutline />
               <span>Your Library</span>
@@ -61,7 +68,6 @@ function NavBar() {
               className={`${
                 navbarActive === "create" ? styles.item_active : ""
               }`}
-              onClick={() => setNavbarActive("create")}
             >
               <RiAddBoxFill />
               <span>Create Playlist</span>
@@ -70,7 +76,6 @@ function NavBar() {
               className={`${
                 navbarActive === "liked" ? styles.item_active : ""
               }`}
-              onClick={() => setNavbarActive("liked")}
             >
               <BiSolidHeartSquare />
               <span>Liked Songs</span>

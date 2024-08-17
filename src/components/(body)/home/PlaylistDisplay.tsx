@@ -1,32 +1,37 @@
+'use client';
+
 import { fetchPlaylists } from "@/app/API/fetchPlaylists";
 import { useEffect, useState } from "react";
 import styles from "./playlist-display.module.scss";
 import Image from "next/image";
 import { fetchSpecificPlaylist } from "@/app/API/fetchSpecificPlaylist";
 import Link from "next/link";
-
-interface PlaylistImage {
-  url: string;
-  height?: number;
-  width?: number;
-}
-
-interface Playlist {
-  id: string;
-  name: string;
-  description: string;
-  images: PlaylistImage[];
-}
+import { Playlist } from "@/types/playlist";
+import { stripHTML } from "@/helpers/deleteHTML";
 
 const PlaylistDisplay: React.FC = () => {
   const [focusPlaylists, setFocusPlaylists] = useState<Playlist[]>([]);
   const [spotifyPlaylists, setSpotifyPlaylists] = useState<Playlist[]>([]);
   const [showAllFocus, setShowAllFocus] = useState<Boolean>(false);
   const [showAllPlaylist, setShowAllPlaylist] = useState<Boolean>(false);
+  const [token, setToken] = useState<string | null>(null);
+  
+  useEffect(() => {
+    const checkToken = () => {
+      const token = sessionStorage.getItem("access_token");
+      if (token) {
+        setToken(token);
+      }
+    };
+
+    checkToken(); // Check immediately
+    const intervalId = setInterval(checkToken, 1000); // Check every second
+
+    return () => clearInterval(intervalId); // Clean up interval on component unmount
+  }, []);
 
   useEffect(() => {
     const fetchPlaylistsData = async () => {
-      const token = sessionStorage.getItem("access_token");
       if (token) {
         try {
           const focusPlaylists = await fetchPlaylists("Focus", token);
@@ -43,12 +48,7 @@ const PlaylistDisplay: React.FC = () => {
     };
 
     fetchPlaylistsData();
-  }, []);
-
-  const stripHTML = (html: string): string => {
-    const doc = new DOMParser().parseFromString(html, "text/html");
-    return doc.body.textContent || "";
-  };
+  }, [token]); // Re-fetch when token is available
 
   return (
     <div className={styles.container_playlist_display}>
