@@ -13,8 +13,15 @@ const fetchSearchResults = async (token: string, query: string) => {
 const SpotifySearch: React.FC = () => {
   const [currentTrackUri, setCurrentTrackUri] = useState<string | null>(null);
   const { searchBar } = useAppState();
-
-  const token = sessionStorage.getItem("access_token");
+  const [token, setToken] = useState<string | null>(null);
+  
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      // Browser-only code
+      const storedToken = sessionStorage.getItem("access_token");
+      setToken(storedToken);
+    }
+  }, []);
 
   const { data: tracks = [], error } = useQuery({
     queryKey: ["spotifySearch", searchBar],
