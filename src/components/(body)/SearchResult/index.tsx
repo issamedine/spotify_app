@@ -4,6 +4,7 @@ import SpotifyEmbed from "@/components/SpotifyEmbed";
 import { useAppState } from "@/context/MyContext";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import Track from "@/components/ui/track";
 
 const fetchSearchResults = async (token: string, query: string) => {
   const data = await searchSpotify(token, query, "track,playlist");
@@ -14,9 +15,9 @@ const SpotifySearch: React.FC = () => {
   const [currentTrackUri, setCurrentTrackUri] = useState<string | null>(null);
   const { searchBar } = useAppState();
   const [token, setToken] = useState<string | null>(null);
-  
+
   useEffect(() => {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       // Browser-only code
       const storedToken = sessionStorage.getItem("access_token");
       setToken(storedToken);
@@ -51,30 +52,26 @@ const SpotifySearch: React.FC = () => {
       <div>
         {tracks.length > 0 ? (
           <ul>
-            {tracks.map((track: any) => (
-              <li
-                onClick={() => handleTrackClick(track.uri)}
-                key={track.id}
-                style={{
-                  cursor: "pointer",
-                  display: "flex",
-                  alignItems: "center",
-                }}
-              >
-                <img
-                  src={track.album.images[0].url}
-                  alt={track.name}
-                  width="50"
-                  style={{ marginRight: "10px" }}
+            {tracks.map((track: any) => {
+              const item = {
+                track: {
+                  uri: track.uri,
+                  id: track.id,
+                  name: track.name,
+                  artists: track.artists,
+                  album: {
+                    images: [{ url: track.album.images[0].url }],
+                  },
+                },
+              };
+              return (
+                <Track
+                  item={item}
+                  handleTrackClick={handleTrackClick}
+                  currentTrackUri={currentTrackUri}
                 />
-                <div>
-                  <p>{track.name}</p>
-                  <p>
-                    {track.artists.map((artist: any) => artist.name).join(", ")}
-                  </p>
-                </div>
-              </li>
-            ))}
+              );
+            })}
           </ul>
         ) : (
           <p>No results found</p>

@@ -1,0 +1,55 @@
+.container_card_playlist {
+    display: flex;
+    flex-direction: column;
+    width: 265px;
+    height: 370px;
+    position: relative;
+
+    box-sizing: border-box;
+    padding: 20px;
+    background-color: #201e1e;
+    color: #fff;
+    border-radius: 7px;
+
+    .image_wrapper {
+        position: relative;
+        width: 100%;
+        // height: 100%;
+        overflow: hidden;
+        height: 65%;
+
+        img {
+            border-radius: 7px;
+        }
+    }
+
+    .infos_item {
+        height: 35%;
+        position: absolute;
+        bottom: 0;
+        width: 90%;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        &_name {
+            font-weight: 500;
+            font-size: 14px;
+            text-wrap: nowrap;
+            text-overflow: ellipsis;
+            width: 90%;
+            overflow: hidden;
+        }
+
+        &_description {
+            text-wrap: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 158px;
+
+            color: #757575;
+            font-size: 14px;
+        }
+    }
+}

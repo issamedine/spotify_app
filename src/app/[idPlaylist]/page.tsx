@@ -6,13 +6,14 @@ import styles from "./specific-playlist.module.scss";
 import SpotifyEmbed from "@/components/SpotifyEmbed";
 import { useState } from "react";
 import { Playlist } from "@/types/specificPlaylistTypes";
+import Track from "@/components/ui/track";
 
 const stripHTML = (html: string): string => {
   const doc = new DOMParser().parseFromString(html, "text/html");
   return doc.body.textContent || "";
 };
 
-const PlaylistDisplay: React.FC<{ params: { idPlaylist: string } }> = ({
+const TracksDisplay: React.FC<{ params: { idPlaylist: string } }> = ({
   params,
 }) => {
   const [currentTrackUri, setCurrentTrackUri] = useState<string | null>(null);
@@ -72,13 +73,11 @@ const PlaylistDisplay: React.FC<{ params: { idPlaylist: string } }> = ({
       <p>{stripHTML(playlist.description)}</p>
       <ul>
         {playlist.tracks.items.map((item: any) => (
-          <li
-            key={item.track.id}
-            onClick={() => handleTrackClick(item.track.uri)}
-          >
-            {item.track.name} by{" "}
-            {item.track.artists.map((artist: any) => artist.name).join(", ")}
-          </li>
+          <Track
+            item={item}
+            handleTrackClick={handleTrackClick}
+            currentTrackUri={currentTrackUri}
+          />
         ))}
       </ul>
 
@@ -87,4 +86,4 @@ const PlaylistDisplay: React.FC<{ params: { idPlaylist: string } }> = ({
   );
 };
 
-export default PlaylistDisplay;
+export default TracksDisplay;

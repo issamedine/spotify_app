@@ -1,0 +1,11 @@
+.container_browse_all .title {
+  color: #fff;
+  font-size: 25px;
+  font-weight: 400;
+}
+
+.container_browse_all .container_categories {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}

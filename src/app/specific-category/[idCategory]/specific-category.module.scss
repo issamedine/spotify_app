@@ -8,4 +8,10 @@
     background-color: #3b3b3b;
     color: #fff;
     z-index: 1;
+
+    .wrapper_playlist {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 40px;
+    }
 }

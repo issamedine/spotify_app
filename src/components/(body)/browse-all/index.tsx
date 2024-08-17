@@ -5,6 +5,8 @@ import { getSpotifyCategories } from "@/app/API/browse";
 import { SpotifyCategory } from "@/types/category";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import styles from './browse-all.module.scss'
+import CategoryCard from "@/components/ui/category";
 
 const fetchCategories = async (token: string | null) => {
   if (!token) {
@@ -34,22 +36,16 @@ const BrowseAll: React.FC = () => {
     return <div>Error fetching Spotify categories</div>;
   }
 
+  if (categories.length === 0) {
+    return <div>You should connect to app</div>;
+  }
+
   return (
-    <div>
-      <h1>Browse All</h1>
-      <div>
+    <div className={styles.container_browse_all}>
+      <div className={styles.title}>Browse All</div>
+      <div className={styles.container_categories}>
         {categories.map((category: SpotifyCategory) => (
-          <Link href={`/specific-category/${category.id}`} key={category.id}>
-            <div>
-              <h2>{category.name}</h2>
-              <img
-                src={category.icons[0]?.url}
-                alt={category.name}
-                width="100"
-                style={{ display: "block" }}
-              />
-            </div>
-          </Link>
+          <CategoryCard category={category} />
         ))}
       </div>
     </div>

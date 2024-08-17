@@ -14,5 +14,5 @@
 }
 
 .container_spotify_embed .iframe_exist {
-  z-index: 3 !important;
+  z-index: 2 !important;
 }

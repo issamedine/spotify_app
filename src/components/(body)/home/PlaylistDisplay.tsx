@@ -8,6 +8,7 @@ import Link from "next/link";
 import { Playlist } from "@/types/playlist";
 import { stripHTML } from "@/helpers/deleteHTML";
 import { useEffect, useState } from "react";
+import PlaylistCard from "@/components/ui/playlist-card";
 
 const fetchPlaylistsData = async (type: string, token: string) => {
   return fetchPlaylists(type, token);
@@ -50,6 +51,10 @@ const PlaylistDisplay: React.FC = () => {
     return <div>Error fetching playlists</div>;
   }
 
+  if (focusPlaylists.length === 0 || spotifyPlaylists.length === 0) {
+    return <div>You should connect to app</div>;
+  }
+
   return (
     <div className={styles.container_playlist_display}>
       <div className={styles.header_show_list}>
@@ -64,30 +69,7 @@ const PlaylistDisplay: React.FC = () => {
       <div className={styles.wrapper_playlist}>
         {focusPlaylists.map((playlist: any, index: any) => {
           if (!showAllFocus && index > 4) return null;
-          return (
-            <Link
-              key={playlist.id}
-              className={styles.item_playlist}
-              href={`/${playlist.id}`}
-            >
-              {playlist.images[0] && (
-                <div className={styles.image_wrapper}>
-                  <Image
-                    src={playlist.images[0].url}
-                    alt={playlist.name}
-                    layout="fill"
-                    objectFit="cover"
-                  />
-                </div>
-              )}
-              <div className={styles.infos_item}>
-                <div className={styles.infos_item_name}>{playlist.name}</div>
-                <div className={styles.infos_item_description}>
-                  {stripHTML(playlist.description)}
-                </div>
-              </div>
-            </Link>
-          );
+          return <PlaylistCard playlist={playlist} />;
         })}
       </div>
       <div className={styles.header_show_list}>
@@ -102,30 +84,7 @@ const PlaylistDisplay: React.FC = () => {
       <div className={styles.wrapper_playlist}>
         {spotifyPlaylists.map((playlist: any, index: any) => {
           if (!showAllPlaylist && index > 4) return null;
-          return (
-            <Link
-              key={playlist.id}
-              className={styles.item_playlist}
-              href={`/${playlist.id}`}
-            >
-              {playlist.images[0] && (
-                <div className={styles.image_wrapper}>
-                  <Image
-                    src={playlist.images[0].url}
-                    alt={playlist.name}
-                    layout="fill"
-                    objectFit="cover"
-                  />
-                </div>
-              )}
-              <div className={styles.infos_item}>
-                <div className={styles.infos_item_name}>{playlist.name}</div>
-                <div className={styles.infos_item_description}>
-                  {stripHTML(playlist.description)}
-                </div>
-              </div>
-            </Link>
-          );
+          return <PlaylistCard playlist={playlist} />;
         })}
       </div>
     </div>

@@ -5,6 +5,7 @@ import { SpotifyCategory, SpotifyPlaylist } from "@/types/category";
 import { useEffect, useState } from "react";
 import styles from "./specific-category.module.scss";
 import Link from "next/link";
+import PlaylistCard from "@/components/ui/playlist-card";
 
 const CategoryPlaylist: React.FC = ({ params }: any) => {
   const [categories, setCategories] = useState<SpotifyCategory[]>([]);
@@ -43,16 +44,9 @@ const CategoryPlaylist: React.FC = ({ params }: any) => {
         {loading ? (
           <p>Loading...</p>
         ) : (
-          <div>
+          <div className={styles.wrapper_playlist}>
             {playlists.map((playlist) => (
-              <Link href={`/${playlist.id}`} key={playlist.id}>
-                <h3>{playlist.name}</h3>
-                <img
-                  src={playlist.images[0].url}
-                  alt={playlist.name}
-                  width="100"
-                />
-              </Link>
+              <PlaylistCard playlist={playlist} />
             ))}
           </div>
         )}
