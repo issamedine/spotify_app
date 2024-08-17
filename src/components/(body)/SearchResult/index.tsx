@@ -2,9 +2,9 @@ import { useQuery } from "@tanstack/react-query";
 import { searchSpotify } from "@/app/API/searchSpotify";
 import SpotifyEmbed from "@/components/SpotifyEmbed";
 import { useAppState } from "@/context/MyContext";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import Track from "@/components/ui/track";
+import { getEmbedUrl } from "@/helpers/embedUrl";
 
 const fetchSearchResults = async (token: string, query: string) => {
   const data = await searchSpotify(token, query, "track,playlist");
@@ -35,9 +35,7 @@ const SpotifySearch: React.FC = () => {
     enabled: !!token && !!searchBar, // Only run query if token and searchBar are available
   });
 
-  const embedUrl = currentTrackUri
-    ? `https://open.spotify.com/embed/track/${currentTrackUri.split(":").pop()}`
-    : "";
+  const embedUrl = getEmbedUrl(currentTrackUri);
 
   const handleTrackClick = (uri: string) => {
     setCurrentTrackUri(uri);

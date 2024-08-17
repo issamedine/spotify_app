@@ -3,10 +3,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { fetchPlaylists } from "@/app/API/fetchPlaylists";
 import styles from "./playlist-display.module.scss";
-import Image from "next/image";
-import Link from "next/link";
-import { Playlist } from "@/types/playlist";
-import { stripHTML } from "@/helpers/deleteHTML";
 import { useEffect, useState } from "react";
 import PlaylistCard from "@/components/ui/playlist-card";
 

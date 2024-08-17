@@ -7,13 +7,10 @@ import SpotifyEmbed from "@/components/SpotifyEmbed";
 import { useState } from "react";
 import { Playlist } from "@/types/specificPlaylistTypes";
 import Track from "@/components/ui/track";
+import { stripHTML } from "@/helpers/deleteHTML";
+import { getEmbedUrl } from "@/helpers/embedUrl";
 
-const stripHTML = (html: string): string => {
-  const doc = new DOMParser().parseFromString(html, "text/html");
-  return doc.body.textContent || "";
-};
-
-const TracksDisplay: React.FC<{ params: { idPlaylist: string } }> = ({
+const TracksDisplayPage: React.FC<{ params: { idPlaylist: string } }> = ({
   params,
 }) => {
   const [currentTrackUri, setCurrentTrackUri] = useState<string | null>(null);
@@ -50,9 +47,7 @@ const TracksDisplay: React.FC<{ params: { idPlaylist: string } }> = ({
     return <div>No playlist found</div>;
   }
 
-  const embedUrl = currentTrackUri
-    ? `https://open.spotify.com/embed/track/${currentTrackUri.split(":").pop()}`
-    : "";
+  const embedUrl = getEmbedUrl(currentTrackUri);
 
   const handleTrackClick = (uri: string) => {
     setCurrentTrackUri(uri);
@@ -86,4 +81,4 @@ const TracksDisplay: React.FC<{ params: { idPlaylist: string } }> = ({
   );
 };
 
-export default TracksDisplay;
+export default TracksDisplayPage;

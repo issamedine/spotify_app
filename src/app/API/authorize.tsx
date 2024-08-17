@@ -1,6 +1,6 @@
 const SPOTIFY_CLIENT_ID = `3738206533f14da59d6fed4e32c0c314`;
-const redirectUri = "https://spotify-app-eight-xi.vercel.app/";
-// const redirectUri = "http://localhost:3000/";
+const REDIRECTURI = "https://spotify-app-eight-xi.vercel.app/";
+// const REDIRECTURI = "http://localhost:3000/";
 
 function generateRandomString(length: number): string {
   let text = "";
@@ -56,7 +56,7 @@ export const authorize = async () => {
       response_type: "code",
       client_id: SPOTIFY_CLIENT_ID,
       scope: scope,  // Updated scope
-      redirect_uri: redirectUri,
+      redirect_uri: REDIRECTURI,
       state: state,
       code_challenge_method: "S256",
       code_challenge: codeChallenge,
@@ -73,7 +73,7 @@ export const getToken = async (code: string) => {
   const body = new URLSearchParams({
     grant_type: "authorization_code",
     code: code,
-    redirect_uri: redirectUri,
+    redirect_uri: REDIRECTURI,
     client_id: SPOTIFY_CLIENT_ID,
     code_verifier: codeVerifier ?? "",
   });
